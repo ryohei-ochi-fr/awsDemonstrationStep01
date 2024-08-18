@@ -63,6 +63,7 @@ hub create
 githubへの認証は、事前にgithubでアクセストークンを作成するか、クレデンシャルマネージャを利用する。
 
 `github.com username` メアドじゃないユーザ名 ryohei-ochi-fr
+
 `github.com password` アクセストークン
 
 認証エラーとなる場合はhubの設定ファイルを確認する
@@ -94,4 +95,57 @@ git branch
 
 git branch -m master
 git push -u origin master
+```
+
+## npm
+
+```ps
+npm init
+```
+
+## gRPC
+
+バックエンドでの長時間処理の経過をフロントへ渡すために使ってみる。
+
+[gRPCをTypeScriptで使う（前編） #Node.js - Qiita](https://qiita.com/Aniokrait/items/d5cb4ebba5af2acee5e5)
+
+[TypeScriptでgRPCを使ったアプリケーション開発をしてみた - 電通総研 テックブログ](https://tech.dentsusoken.com/entry/2022/09/26/TypeScript%E3%81%A7gRPC%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F%E3%82%A2%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E9%96%8B%E7%99%BA%E3%82%92%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F)
+
+- Server streaming
+
+RPC クライアントから送られてきた一つのリクエストに対して、サーバは複数回に分けてレスポンスを返す通信方式です。
+
+[Node.js + TypeScript で gRPCに入門する [後編: 実装編]](https://zenn.dev/hedrall/articles/grpc-implementation-20211221)
+
+[TypeScriptでgRPCのstreaming RPCを使ったチャットのサンプル - daikiojm’s diary](https://daikiojm.hatenablog.com/entry/2018/12/24/002656)
+
+[gRPCのServer-Streaming RPCを用いたPUSH通知の実現事例 | Fintan](https://fintan.jp/page/1521/)
+
+[OK Google, Protocol Buffers から生成したコードを使って Node.js で gRPC 通信して | メルカリエンジニアリング](https://engineering.mercari.com/blog/entry/20201216-53796c2494/)
+
+```ps
+npm install @grpc/grpc-js google-protobuf @types/google-protobuf typescript ts-node
+npm install --save-dev grpc-tools grpc_tools_node_protoc_ts 
+npm run generate
+
+```
+
+## 起動方法
+
+シンプルにサーバとクライアント間で通信
+
+```ps
+
+# server
+npm run dev:server
+
+# client
+npm run dev:bff
+```
+
+ブラウザでアクセス
+
+```ps
+http://localhost:9000/hello-world
+http://localhost:9000/hello-world?name=Mercari
 ```
