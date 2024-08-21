@@ -72,6 +72,8 @@ app.get("/index.html", (req, res) => {
   res.render("index", { serverHostname }); // index.ejsテンプレートに変数を渡す
 });
 
+app.get("/rate-limit-page.html", (req, res) => {
+});
 
 // SSEエンドポイント
 app.get("/sse", (req, res) => {
