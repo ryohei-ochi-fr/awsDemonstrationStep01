@@ -45,7 +45,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // ルートハンドラー
-app.get("/", (req, res) => {
+app.get("/index.html", (req, res) => {
   const serverHostname = os.hostname();
   res.render("index", { serverHostname }); // index.ejsテンプレートに変数を渡す
 });
