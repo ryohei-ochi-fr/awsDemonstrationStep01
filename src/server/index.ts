@@ -4,13 +4,20 @@ import os from "os";
 import path from "path";
 import ejs from "ejs";
 
+import expressSession from "express-session";
+import connectRedis from "connect-redis";
+import Redis from "ioredis";
+import session from "express-session";
+
 const app: express.Express = express();
 const port = 3000;
 
 // Rate Limitの設定
 const apiLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10分
-  limit: 100, // 10分間に10リクエストまで許可
+
+  limit: 1, // 10分間に100リクエストまで許可
+
   standardHeaders: true, // Rate Limitヘッダーに関する情報を返す
   legacyHeaders: false, // 無効化されたRate Limitヘッダーを削除する
   handler: (req, res) => {
@@ -39,8 +46,8 @@ app.set("views", path.join(__dirname, "views"));
 
 // ルートハンドラー
 app.get("/", (req, res) => {
-    const serverHostname = os.hostname();
-    res.render("index", { serverHostname }); // index.ejsテンプレートに変数を渡す
+  const serverHostname = os.hostname();
+  res.render("index", { serverHostname }); // index.ejsテンプレートに変数を渡す
 });
 
 
