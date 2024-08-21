@@ -12,6 +12,9 @@ import session from "express-session";
 const app: express.Express = express();
 const port = 3000;
 
+// clientディレクトリを静的ファイルのルートとして設定
+app.use(express.static("src/client/"));
+
 // Rate Limitの設定
 const apiLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10分
@@ -34,33 +37,8 @@ const apiLimiter = rateLimit({
   },
 });
 
-// Rate Limitの設定
-const noapiLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10分
-
-  limit: 10000, // 10分間に100リクエストまで許可
-
-  standardHeaders: true, // Rate Limitヘッダーに関する情報を返す
-  legacyHeaders: false, // 無効化されたRate Limitヘッダーを削除する
-  handler: (req, res) => {
-    res
-      .set({
-        "Retry-After": 3600, // 秒単位でクライアントに再試行を伝える
-        // "X-RateLimit-Reset": "時間のタイムスタンプ", // Rate Limitがリセットされる予定時刻
-      })
-      .redirect("/rate-limit-page.html");
-  },
-});
-
-
-
-
 // Rate Limitを適用
 app.use("/index.html", apiLimiter);
-app.use("/rate-limit-page.html", noapiLimiter);
-
-// clientディレクトリを静的ファイルのルートとして設定
-app.use(express.static("src/client/"));
 
 // Expressアプリケーションの設定
 app.set("view engine", "ejs");
@@ -70,9 +48,6 @@ app.set("views", path.join(__dirname, "views"));
 app.get("/index.html", (req, res) => {
   const serverHostname = os.hostname();
   res.render("index", { serverHostname }); // index.ejsテンプレートに変数を渡す
-});
-
-app.get("/rate-limit-page.html", (req, res) => {
 });
 
 // SSEエンドポイント
