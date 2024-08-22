@@ -1,0 +1,37 @@
+<!-- クライアント側のHTML -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE Example</title>
+</head>
+<body>
+    <div id="start">受付 : <script>document.write(new Date().toISOString());</script></div>
+    <div id="sse-data"></div>
+
+    <script>
+        const sseDataElement = document.getElementById('sse-data');
+        const eventSource = new EventSource('/sse');
+
+        // メッセージイベントのリスナーを設定
+        eventSource.addEventListener('message', (e) => {
+            const data = JSON.parse(e.data);
+            sseDataElement.innerText = `Time: ${data.time} Message: ${data.message}`;
+        });
+
+        // SSE切断タイマーを設定
+        const timeout = function() {
+            eventSource.close();
+            sseDataElement.innerText = `Time: ${new Date().toISOString()} Message: 処理終了(SSE Closed)`;
+        }
+        setTimeout(timeout, 10 * 60 * 1000);
+
+        // SSEが切断された時の処理
+        eventSource.onerror = () => {
+            console.log('SSE disconnected!');
+            eventSource.close();
+        };
+    </script>
+</body>
+</html>
