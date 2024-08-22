@@ -20,7 +20,7 @@
                 const visitorId = result.visitorId;
                 console.log(visitorId);
                 // Send the visitor ID to the server
-                return fetch('http://localhost:3000/identify', {
+                return fetch('/identify', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
