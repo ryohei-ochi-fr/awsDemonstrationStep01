@@ -72,6 +72,7 @@ let progressVisitorId = "";
 app.get("/index.html", async (req, res) => {
   const db = await dbPromise;
   await db.exec("create table if not exists VisitorId(id text)");
+  console.log('create table');
   await db.exec("delete from VisitorId;");
   // await db.exec("truncate table VisitorId;");
   //await db.exec("INSERT INTO users (name, email) VALUES ('John Doe', 'john@example.com'), ('Jane Doe', 'jane@example.com')");
@@ -86,6 +87,13 @@ app.get("/index.html", async (req, res) => {
   } else {
     res.redirect(302, "/rate-limit-page.html");
   }
+});
+
+app.get("/drop.html", async (req, res) => {
+  const db = await dbPromise;
+  await db.exec("drop table VisitorId");
+  res.write('drop tablr');
+  console.log('drop tablr');
 });
 
 // ハンドラー
@@ -129,7 +137,6 @@ app.get("/sse", (req, res) => {
   res.setHeader("Cache-Control", "no-cache");
 
   progressVisitorId = globalVisitorId;
-
   // 1秒ごとにメッセージを送信
   setInterval(() => {
     const data = JSON.stringify({
