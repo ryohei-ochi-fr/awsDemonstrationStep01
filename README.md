@@ -97,3 +97,5 @@ git push -u origin master
 ```
 
 [Node.js Expressの例を通じて、Webアプリのセッションについて理解する #JavaScript - Qiita](https://qiita.com/yuta-katayama-23/items/4ea30b13e8002853402b)
+
+http://ec2-44-242-222-52.us-west-2.compute.amazonaws.com:3000/index.html

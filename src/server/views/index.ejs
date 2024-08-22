@@ -1,12 +1,41 @@
-<!-- クライアント側のHTML -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSE Example</title>
+    <title>Gアン特別リサイタル受付サイト</title>
+    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
 </head>
+
 <body>
+    <script>
+        // Initialize the agent at application startup.
+        const fpPromise = FingerprintJS.load();
+
+        // Get the visitor identifier when you need it.
+        fpPromise
+            .then(fp => fp.get())
+            .then(result => {
+                const visitorId = result.visitorId;
+                console.log(visitorId);
+                // Send the visitor ID to the server
+                return fetch('http://localhost:3000/identify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ visitorId })
+                });
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.getElementById('visitor-id').textContent = `Visitor ID: ${data.visitorId}`;
+            });
+
+    </script>
+
     <form action="progress.html" method="get">
         <div>1リクエストのバックエンド処理が10分かかるサンプル</div>
         <div>
@@ -14,8 +43,11 @@
             <input type="text" id="name" name="name">
             <input type="submit" value="実行">
         </div>
-        
-        </form>
-        <div>host: <%= serverHostname %></script></div>
+
+    </form>
+    <div>host: <%= serverHostname %>
+    </div>
+    <div id="visitor-id"></div>
 </body>
+
 </html>
